@@ -1,6 +1,7 @@
 package com.bdpanajoto.ws.rest.repository;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -21,6 +22,9 @@ public class PlotRepository extends InMemoryRepository<Plot> {
 		if (!elements.isEmpty() && contains(elements, desired.getName(), desired.getUser().getUsername())) {
 			throw new IllegalArgumentException("Can not add the same plot twice to the same user!");
 		}
+		desired.setUser(
+				users.elements.stream().filter(user -> desired.getUser().getUsername().equals(user.getUsername()))
+						.collect(Collectors.toList()).get(0));
 		original.setName(desired.getName());
 		original.setCoordinates(desired.getCoordinates());
 		original.setCulture(desired.getCulture());
@@ -36,11 +40,18 @@ public class PlotRepository extends InMemoryRepository<Plot> {
 		if (!elements.isEmpty() && contains(elements, element.getName(), element.getUser().getUsername())) {
 			throw new IllegalArgumentException("Can not add the same plot twice to the same user!");
 		}
+		element.setUser(
+				users.elements.stream().filter(user -> element.getUser().getUsername().equals(user.getUsername()))
+						.collect(Collectors.toList()).get(0));
 		return super.create(element);
 	}
 
 	private boolean contains(List<Plot> elements, String groupName, String userName) {
 		return elements.stream()
 				.anyMatch(group -> groupName.equals(group.getName()) && userName.equals(group.getUser().getUsername()));
+	}
+
+	public List<Plot> getPlotsByUserId(Long id) {
+		return elements.stream().filter(plot -> id.equals(plot.getId())).collect(Collectors.toList());
 	}
 }
