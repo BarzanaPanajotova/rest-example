@@ -14,11 +14,13 @@ import com.bdpanajoto.ws.rest.resource.PlotResourceAssembler;
 @CrossOrigin(origins = "*")
 @RestController
 @ExposesResourceFor(Plot.class)
-@RequestMapping(value = "/users/*/plots", produces = "application/json")
+@RequestMapping(value = "/plots", produces = "application/json")
 public class PlotController extends AbstractController<Plot, PlotResource> {
+
 	@Autowired
 	public PlotController(PlotRepository repository, PlotResourceAssembler assembler) {
 		super.repository = repository;
 		super.assembler = assembler;
 	}
+
 }

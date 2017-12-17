@@ -1,7 +1,5 @@
 package com.bdpanajoto.ws.rest.domain;
 
-import java.util.Set;
-
 public class User implements Identifiable {
 
 	private Long id;
@@ -10,7 +8,6 @@ public class User implements Identifiable {
 	private int age;
 	private String username;
 	private String password;
-	private Set<Plot> plots;
 
 	@Override
 	public Long getId() {
@@ -87,11 +84,4 @@ public class User implements Identifiable {
 		return true;
 	}
 
-	public Set<Plot> getPlots() {
-		return plots;
-	}
-
-	public void setPlots(Set<Plot> plots) {
-		this.plots = plots;
-	}
 }

@@ -14,7 +14,6 @@ public class UserResource extends ResourceSupport {
 	private final String username;
 	private final String password;
 
-
 	public UserResource(User user) {
 		id = user.getId();
 		name = user.getName();
