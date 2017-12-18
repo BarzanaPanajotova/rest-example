@@ -22,8 +22,8 @@ public class UserRepository extends InMemoryRepository<User> {
 	@Override
 	public User create(User element) {
 
-		if (!elements.isEmpty()
-				&& elements.stream().anyMatch(user -> user.getUsername().equals(element.getUsername()))) {
+		if (!getElements().isEmpty()
+				&& getElements().stream().anyMatch(user -> user.getUsername().equals(element.getUsername()))) {
 			throw new IllegalArgumentException("A user with this username already exists!");
 		}
 		return super.create(element);
@@ -31,7 +31,7 @@ public class UserRepository extends InMemoryRepository<User> {
 
 	public Map<Integer, Integer> generateReport() {
 
-		return elements.stream().collect(Collectors.groupingBy(User::getAge,
+		return getElements().stream().collect(Collectors.groupingBy(User::getAge,
 				Collectors.collectingAndThen(Collectors.mapping(User::getAge, Collectors.toList()), List::size)));
 	}
 

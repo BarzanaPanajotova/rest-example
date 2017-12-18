@@ -15,7 +15,11 @@ public abstract class InMemoryRepository<T extends Identifiable> implements Repo
 	@Autowired
 	private IdGenerator idGenerator;
 
-	protected List<T> elements = Collections.synchronizedList(new ArrayList<>());
+	private List<T> elements = Collections.synchronizedList(new ArrayList<>());
+
+	public List<T> getElements() {
+		return elements;
+	}
 
 	@Override
 	public T create(T element) {

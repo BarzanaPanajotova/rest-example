@@ -15,15 +15,15 @@ public class PlotRepository extends InMemoryRepository<Plot> {
 
 	@Override
 	protected void updateIfExists(Plot original, Plot desired) {
-		if (desired.getUser() != null && !users.elements.stream()
+		if (desired.getUser() != null && !users.getElements().stream()
 				.anyMatch(user -> desired.getUser().getUsername().equals(user.getUsername()))) {
 			throw new IllegalArgumentException("User does not exist!");
 		}
-		if (!elements.isEmpty() && contains(elements, desired.getName(), desired.getUser().getUsername())) {
+		if (!getElements().isEmpty() && contains(getElements(), desired.getName(), desired.getUser().getUsername())) {
 			throw new IllegalArgumentException("Can not add the same plot twice to the same user!");
 		}
 		desired.setUser(
-				users.elements.stream().filter(user -> desired.getUser().getUsername().equals(user.getUsername()))
+				users.getElements().stream().filter(user -> desired.getUser().getUsername().equals(user.getUsername()))
 						.collect(Collectors.toList()).get(0));
 		original.setName(desired.getName());
 		original.setCoordinates(desired.getCoordinates());
@@ -33,15 +33,15 @@ public class PlotRepository extends InMemoryRepository<Plot> {
 
 	@Override
 	public Plot create(Plot element) {
-		if (element.getUser() != null && !users.elements.stream()
+		if (element.getUser() != null && !users.getElements().stream()
 				.anyMatch(user -> element.getUser().getUsername().equals(user.getUsername()))) {
 			throw new IllegalArgumentException("User does not exist!");
 		}
-		if (!elements.isEmpty() && contains(elements, element.getName(), element.getUser().getUsername())) {
+		if (!getElements().isEmpty() && contains(getElements(), element.getName(), element.getUser().getUsername())) {
 			throw new IllegalArgumentException("Can not add the same plot twice to the same user!");
 		}
 		element.setUser(
-				users.elements.stream().filter(user -> element.getUser().getUsername().equals(user.getUsername()))
+				users.getElements().stream().filter(user -> element.getUser().getUsername().equals(user.getUsername()))
 						.collect(Collectors.toList()).get(0));
 		return super.create(element);
 	}
@@ -52,6 +52,6 @@ public class PlotRepository extends InMemoryRepository<Plot> {
 	}
 
 	public List<Plot> getPlotsByUserId(Long id) {
-		return elements.stream().filter(plot -> id.equals(plot.getId())).collect(Collectors.toList());
+		return getElements().stream().filter(plot -> id.equals(plot.getId())).collect(Collectors.toList());
 	}
 }
