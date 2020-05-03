@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestClientException;
 
@@ -25,57 +24,57 @@ import java.util.List;
 @RequestMapping(value = "/users", produces = "application/json")
 public class UserController {
 
-	private UserRepository repository;
+    private UserRepository repository;
 
-	@Autowired
-	public UserController(UserRepository repository) {
-		this.repository = repository;
-	}
+    @Autowired
+    public UserController(UserRepository repository) {
+        this.repository = repository;
+    }
 
-	@GetMapping(value = "/{id}/groups")
-	public ResponseEntity<Collection<Group>> findUserGroups(@PathVariable Long id) {
-		List<Group> element = repository.getGroupsById(id);
+    @GetMapping(value = "/{id}/groups")
+    public ResponseEntity<Collection<Group>> findUserGroups(@PathVariable Long id) {
+        List<Group> element = repository.getGroupsById(id);
 
-		if (!element.isEmpty()) {
-			return new ResponseEntity<>(element, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
-	}
+        if (!element.isEmpty()) {
+            return new ResponseEntity<>(element, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 
-	@GetMapping(value = "/{id}/plots")
-	public ResponseEntity<Collection<Plot>> findUserPlots(@PathVariable Long id) {
-		List<Plot> element = repository.getPlotsById(id);
+    @GetMapping(value = "/{id}/plots")
+    public ResponseEntity<Collection<Plot>> findUserPlots(@PathVariable Long id) {
+        List<Plot> element = repository.getPlotsById(id);
 
-		if (!element.isEmpty()) {
-			return new ResponseEntity<>(element, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
-	}
+        if (!element.isEmpty()) {
+            return new ResponseEntity<>(element, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 
-	@GetMapping
-	public Iterable<User> findAll() {
-		return repository.findAll();
-	}
+    @GetMapping
+    public Iterable<User> findAll() {
+        return repository.findAll();
+    }
 
-	@GetMapping(value = "/{id}")
-	public User findGroup(@PathVariable Long id) {
-		return repository.findById(id).orElseThrow(() -> new RestClientException("User not found"));
-	}
+    @GetMapping(value = "/{id}")
+    public User findGroup(@PathVariable Long id) {
+        return repository.findById(id).orElseThrow(() -> new RestClientException("User not found"));
+    }
 
-	@PostMapping
-	public User save(@RequestBody User user) {
-		return repository.save(user);
-	}
+    @PostMapping
+    public User save(@RequestBody User user) {
+        return repository.save(user);
+    }
 
-	@PutMapping
-	public User update(@RequestBody User user) {
-		return repository.save(user);
-	}
+    @PutMapping
+    public User update(@RequestBody User user) {
+        return repository.save(user);
+    }
 
-	@DeleteMapping(value = "/{id}")
-	public void delete(@PathVariable Long id) {
-		repository.deleteById(id);
-	}
+    @DeleteMapping(value = "/{id}")
+    public void delete(@PathVariable Long id) {
+        repository.deleteById(id);
+    }
 }

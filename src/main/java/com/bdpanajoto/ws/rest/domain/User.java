@@ -18,95 +18,95 @@ import java.util.List;
 @Table(name = "users")
 public class User {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-	@OneToOne(mappedBy = "user",
-			cascade = CascadeType.ALL, orphanRemoval = true)
-	@JsonIgnoreProperties("user")
-	@JsonUnwrapped
-	private UserDetails userDetails;
-	private String username;
-	private String password;
-	@OneToMany
-	@JsonIgnoreProperties("user")
-	private List<Plot> plots;
-	@ManyToMany(mappedBy = "users")
-	@JsonIgnoreProperties("users")
-	private List<Group> groups;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @OneToOne(mappedBy = "user",
+            cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("user")
+    @JsonUnwrapped
+    private UserDetails userDetails;
+    private String username;
+    private String password;
+    @OneToMany
+    @JsonIgnoreProperties("user")
+    private List<Plot> plots;
+    @ManyToMany(mappedBy = "users")
+    @JsonIgnoreProperties("users")
+    private List<Group> groups;
 
-	public Long getId() {
-		return id;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public String getUsername() {
-		return username;
-	}
+    public String getUsername() {
+        return username;
+    }
 
-	public void setUsername(String username) {
-		this.username = username;
-	}
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
-	public String getPassword() {
-		return password;
-	}
+    public String getPassword() {
+        return password;
+    }
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
-	public List<Plot> getPlots() {
-		return plots;
-	}
+    public List<Plot> getPlots() {
+        return plots;
+    }
 
-	public void setPlots(List<Plot> plots) {
-		this.plots = plots;
-	}
+    public void setPlots(List<Plot> plots) {
+        this.plots = plots;
+    }
 
-	public List<Group> getGroups() {
-		return groups;
-	}
+    public List<Group> getGroups() {
+        return groups;
+    }
 
-	public void setGroups(List<Group> groups) {
-		this.groups = groups;
-	}
+    public void setGroups(List<Group> groups) {
+        this.groups = groups;
+    }
 
-	public UserDetails getUserDetails() {
-		return userDetails;
-	}
+    public UserDetails getUserDetails() {
+        return userDetails;
+    }
 
-	public void setUserDetails(UserDetails userDetails) {
-		this.userDetails = userDetails;
-		userDetails.setUser(this);
-	}
+    public void setUserDetails(UserDetails userDetails) {
+        this.userDetails = userDetails;
+        userDetails.setUser(this);
+    }
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		return result;
-	}
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((id == null) ? 0 : id.hashCode());
+        return result;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		User other = (User) obj;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		return true;
-	}
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        User other = (User) obj;
+        if (id == null) {
+            if (other.id != null)
+                return false;
+        } else if (!id.equals(other.id))
+            return false;
+        return true;
+    }
 
 }

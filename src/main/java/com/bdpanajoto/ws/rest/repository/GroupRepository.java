@@ -9,6 +9,6 @@ import java.util.List;
 
 public interface GroupRepository extends PagingAndSortingRepository<Group, Long> {
 
-	@Query(value = "select g.users from Group g where g.id = ?1")
-	List<User> findGroup_UsersById(Long id);
+    @Query(value = "select g.users from Group g where g.id = ?1")
+    List<User> findGroup_UsersById(Long id);
 }

@@ -20,41 +20,41 @@ import java.util.Collection;
 @RequestMapping(value = "/groups", produces = "application/json")
 public class GroupController {
 
-	private GroupRepository repository;
+    private GroupRepository repository;
 
-	@Autowired
-	public GroupController(GroupRepository repository) {
-		this.repository = repository;
-	}
+    @Autowired
+    public GroupController(GroupRepository repository) {
+        this.repository = repository;
+    }
 
-	@GetMapping
-	public Iterable<Group> findAll() {
-		return repository.findAll();
-	}
+    @GetMapping
+    public Iterable<Group> findAll() {
+        return repository.findAll();
+    }
 
-	@GetMapping(value = "/{id}/users")
-	public Collection<User> findGroupUsers(@PathVariable Long id) {
-		return repository.findGroup_UsersById(id);
-	}
+    @GetMapping(value = "/{id}/users")
+    public Collection<User> findGroupUsers(@PathVariable Long id) {
+        return repository.findGroup_UsersById(id);
+    }
 
-	@GetMapping(value = "/{id}")
-	public Group findGroup(@PathVariable Long id) {
-		return repository.findById(id).orElseThrow(() -> new RestClientException("Group not found"));
-	}
+    @GetMapping(value = "/{id}")
+    public Group findGroup(@PathVariable Long id) {
+        return repository.findById(id).orElseThrow(() -> new RestClientException("Group not found"));
+    }
 
-	@PostMapping
-	public Group save(@RequestBody Group group) {
-		return repository.save(group);
-	}
+    @PostMapping
+    public Group save(@RequestBody Group group) {
+        return repository.save(group);
+    }
 
-	@PutMapping
-	public Group update(@RequestBody Group group) {
-		return repository.save(group);
-	}
+    @PutMapping
+    public Group update(@RequestBody Group group) {
+        return repository.save(group);
+    }
 
-	@DeleteMapping(value = "/{id}")
-	public void delete(@PathVariable Long id) {
-		repository.deleteById(id);
-	}
+    @DeleteMapping(value = "/{id}")
+    public void delete(@PathVariable Long id) {
+        repository.deleteById(id);
+    }
 
 }
