@@ -3,22 +3,22 @@ package com.bdpanajoto.ws.rest.repository;
 import com.bdpanajoto.ws.rest.domain.Group;
 import com.bdpanajoto.ws.rest.domain.Plot;
 import com.bdpanajoto.ws.rest.domain.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.PagingAndSortingRepository;
 
-import java.util.List;
-
-public interface UserRepository extends PagingAndSortingRepository<User, Long> {
+public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query(value = "select u.groups from User u where u.id = ?1")
-    List<Group> getUser_GroupsById(Long id);
+    Page<Group> getUser_GroupsById(Long id, Pageable pageable);
 
-    List<Plot> getPlotsById(Long id);
+    Page<Plot> getPlotsById(Long id, Pageable pageable);
 
     @Query(value = "select new com.bdpanajoto.ws.rest.repository.ReportResult(ud.age, count(ud.user)) " +
             "from UserDetails ud " +
             "group by ud.age")
-    List<ReportResult> getUserCountByYear();
+    Page<ReportResult> getUserCountByYear(Pageable pageable);
 
 
 }

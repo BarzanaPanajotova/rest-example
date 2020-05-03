@@ -1,8 +1,8 @@
 package com.bdpanajoto.ws.rest.repository;
 
 import com.bdpanajoto.ws.rest.domain.Plot;
-import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface PlotRepository extends PagingAndSortingRepository<Plot, Long> {
+public interface PlotRepository extends JpaRepository<Plot, Long> {
 
 }
