@@ -1,51 +1,60 @@
 package com.bdpanajoto.ws.rest.controller;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.ExposesResourceFor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.bdpanajoto.ws.rest.domain.Group;
 import com.bdpanajoto.ws.rest.domain.User;
 import com.bdpanajoto.ws.rest.repository.GroupRepository;
-import com.bdpanajoto.ws.rest.resource.GroupResource;
-import com.bdpanajoto.ws.rest.resource.GroupResourceAssembler;
-import com.bdpanajoto.ws.rest.resource.UserResource;
-import com.bdpanajoto.ws.rest.resource.UserResourceAssembler;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestClientException;
 
-@CrossOrigin(origins = "*")
+import java.util.Collection;
+
 @RestController
-@ExposesResourceFor(Group.class)
 @RequestMapping(value = "/groups", produces = "application/json")
-public class GroupController extends AbstractController<Group, GroupResource> {
+public class GroupController {
+
+	private GroupRepository repository;
 
 	@Autowired
-	private UserResourceAssembler userAssembler;
-
-	@Autowired
-	public GroupController(GroupRepository repository, GroupResourceAssembler assembler) {
-		super.repository = repository;
-		super.assembler = assembler;
+	public GroupController(GroupRepository repository) {
+		this.repository = repository;
 	}
 
-	@RequestMapping(value = "/{id}/users", method = RequestMethod.GET)
-	public ResponseEntity<Collection<UserResource>> findGroupsUsers(@PathVariable Long id) {
-		Optional<Group> group = repository.findById(id);
-
-		if (!group.isPresent()) {
-			List<User> element = ((GroupRepository) repository).getUsersByGroupName(group.get().getName());
-			return new ResponseEntity<>(userAssembler.toResourceCollection(element), HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
+	@GetMapping
+	public Iterable<Group> findAll() {
+		return repository.findAll();
 	}
+
+	@GetMapping(value = "/{id}/users")
+	public Collection<User> findGroupUsers(@PathVariable Long id) {
+		return repository.findGroup_UsersById(id);
+	}
+
+	@GetMapping(value = "/{id}")
+	public Group findGroup(@PathVariable Long id) {
+		return repository.findById(id).orElseThrow(() -> new RestClientException("Group not found"));
+	}
+
+	@PostMapping
+	public Group save(@RequestBody Group group) {
+		return repository.save(group);
+	}
+
+	@PutMapping
+	public Group update(@RequestBody Group group) {
+		return repository.save(group);
+	}
+
+	@DeleteMapping(value = "/{id}")
+	public void delete(@PathVariable Long id) {
+		repository.deleteById(id);
+	}
+
 }

@@ -1,38 +1,46 @@
 package com.bdpanajoto.ws.rest.domain;
 
-public class User implements Identifiable {
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import java.util.List;
+
+@Entity
+@Table(name = "users")
+public class User {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	private String name;
-	private String email;
-	private int age;
+	@OneToOne(mappedBy = "user",
+			cascade = CascadeType.ALL, orphanRemoval = true)
+	@JsonIgnoreProperties("user")
+	@JsonUnwrapped
+	private UserDetails userDetails;
 	private String username;
 	private String password;
+	@OneToMany
+	@JsonIgnoreProperties("user")
+	private List<Plot> plots;
+	@ManyToMany(mappedBy = "users")
+	@JsonIgnoreProperties("users")
+	private List<Group> groups;
 
-	@Override
 	public Long getId() {
 		return id;
 	}
 
-	@Override
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public int getAge() {
-		return age;
-	}
-
-	public void setAge(int age) {
-		this.age = age;
 	}
 
 	public String getUsername() {
@@ -51,12 +59,29 @@ public class User implements Identifiable {
 		this.password = password;
 	}
 
-	public String getEmail() {
-		return email;
+	public List<Plot> getPlots() {
+		return plots;
 	}
 
-	public void setEmail(String email) {
-		this.email = email;
+	public void setPlots(List<Plot> plots) {
+		this.plots = plots;
+	}
+
+	public List<Group> getGroups() {
+		return groups;
+	}
+
+	public void setGroups(List<Group> groups) {
+		this.groups = groups;
+	}
+
+	public UserDetails getUserDetails() {
+		return userDetails;
+	}
+
+	public void setUserDetails(UserDetails userDetails) {
+		this.userDetails = userDetails;
+		userDetails.setUser(this);
 	}
 
 	@Override

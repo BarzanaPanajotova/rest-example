@@ -1,70 +1,81 @@
 package com.bdpanajoto.ws.rest.controller;
 
-import java.util.Collection;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.ExposesResourceFor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.bdpanajoto.ws.rest.domain.Group;
 import com.bdpanajoto.ws.rest.domain.Plot;
 import com.bdpanajoto.ws.rest.domain.User;
-import com.bdpanajoto.ws.rest.repository.GroupRepository;
-import com.bdpanajoto.ws.rest.repository.PlotRepository;
 import com.bdpanajoto.ws.rest.repository.UserRepository;
-import com.bdpanajoto.ws.rest.resource.GroupResource;
-import com.bdpanajoto.ws.rest.resource.GroupResourceAssembler;
-import com.bdpanajoto.ws.rest.resource.PlotResource;
-import com.bdpanajoto.ws.rest.resource.PlotResourceAssembler;
-import com.bdpanajoto.ws.rest.resource.UserResource;
-import com.bdpanajoto.ws.rest.resource.UserResourceAssembler;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestClientException;
 
-@CrossOrigin(origins = "*")
+import java.util.Collection;
+import java.util.List;
+
 @RestController
-@ExposesResourceFor(User.class)
 @RequestMapping(value = "/users", produces = "application/json")
-public class UserController extends AbstractController<User, UserResource> {
-	@Autowired
-	private GroupRepository groupRepository;
-	@Autowired
-	private GroupResourceAssembler groupAssembler;
-	@Autowired
-	private PlotRepository plotRepository;
-	@Autowired
-	private PlotResourceAssembler plotAssembler;
+public class UserController {
+
+	private UserRepository repository;
 
 	@Autowired
-	public UserController(UserRepository repository, UserResourceAssembler assembler) {
-		super.repository = repository;
-		super.assembler = assembler;
+	public UserController(UserRepository repository) {
+		this.repository = repository;
 	}
 
-	@RequestMapping(value = "/{id}/groups", method = RequestMethod.GET)
-	public ResponseEntity<Collection<GroupResource>> findUserGroups(@PathVariable Long id) {
-		List<Group> element = groupRepository.getGroupsByUserId(id);
+	@GetMapping(value = "/{id}/groups")
+	public ResponseEntity<Collection<Group>> findUserGroups(@PathVariable Long id) {
+		List<Group> element = repository.getGroupsById(id);
 
 		if (!element.isEmpty()) {
-			return new ResponseEntity<>(groupAssembler.toResourceCollection(element), HttpStatus.OK);
+			return new ResponseEntity<>(element, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
 
-	@RequestMapping(value = "/{id}/plots", method = RequestMethod.GET)
-	public ResponseEntity<Collection<PlotResource>> findUserPlots(@PathVariable Long id) {
-		List<Plot> element = plotRepository.getPlotsByUserId(id);
+	@GetMapping(value = "/{id}/plots")
+	public ResponseEntity<Collection<Plot>> findUserPlots(@PathVariable Long id) {
+		List<Plot> element = repository.getPlotsById(id);
 
 		if (!element.isEmpty()) {
-			return new ResponseEntity<>(plotAssembler.toResourceCollection(element), HttpStatus.OK);
+			return new ResponseEntity<>(element, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
+	}
+
+	@GetMapping
+	public Iterable<User> findAll() {
+		return repository.findAll();
+	}
+
+	@GetMapping(value = "/{id}")
+	public User findGroup(@PathVariable Long id) {
+		return repository.findById(id).orElseThrow(() -> new RestClientException("User not found"));
+	}
+
+	@PostMapping
+	public User save(@RequestBody User user) {
+		return repository.save(user);
+	}
+
+	@PutMapping
+	public User update(@RequestBody User user) {
+		return repository.save(user);
+	}
+
+	@DeleteMapping(value = "/{id}")
+	public void delete(@PathVariable Long id) {
+		repository.deleteById(id);
 	}
 }

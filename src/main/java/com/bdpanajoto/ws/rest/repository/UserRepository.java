@@ -1,38 +1,23 @@
 package com.bdpanajoto.ws.rest.repository;
 
+import com.bdpanajoto.ws.rest.domain.Group;
+import com.bdpanajoto.ws.rest.domain.Plot;
+import com.bdpanajoto.ws.rest.domain.User;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
+
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
-import org.springframework.stereotype.Repository;
+public interface UserRepository extends PagingAndSortingRepository<User, Long> {
 
-import com.bdpanajoto.ws.rest.domain.User;
+	List<Group> getGroupsById(Long id);
 
-@Repository
-public class UserRepository extends InMemoryRepository<User> {
+	List<Plot> getPlotsById(Long id);
 
-	protected void updateIfExists(User original, User updated) {
-		original.setName(updated.getName());
-		original.setEmail(updated.getEmail());
-		original.setAge(updated.getAge());
-		original.setUsername(updated.getUsername());
-		original.setPassword(updated.getPassword());
-	}
-
-	@Override
-	public User create(User element) {
-
-		if (!getElements().isEmpty()
-				&& getElements().stream().anyMatch(user -> user.getUsername().equals(element.getUsername()))) {
-			throw new IllegalArgumentException("A user with this username already exists!");
-		}
-		return super.create(element);
-	}
-
-	public Map<Integer, Integer> generateReport() {
-
-		return getElements().stream().collect(Collectors.groupingBy(User::getAge,
-				Collectors.collectingAndThen(Collectors.mapping(User::getAge, Collectors.toList()), List::size)));
-	}
-
+	@Query(value = "select distinct ud.age, count(ud.user) as cnt " +
+			"from UserDetails ud " +
+			"group by ud.age")
+	Map<Integer, Integer> getUserCountByYear();
 }

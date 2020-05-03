@@ -1,18 +1,31 @@
 package com.bdpanajoto.ws.rest.domain;
 
-public class Plot implements Identifiable {
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "plots")
+public class Plot {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String name;
 	private String coordinates;
 	private String culture;
+	@ManyToOne
+	@JsonIgnoreProperties("plots")
 	private User user;
 
-	@Override
 	public Long getId() {
 		return id;
 	}
 
-	@Override
 	public void setId(Long id) {
 		this.id = id;
 	}
@@ -48,6 +61,7 @@ public class Plot implements Identifiable {
 	public void setUser(User user) {
 		this.user = user;
 	}
+
 
 	@Override
 	public int hashCode() {

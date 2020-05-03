@@ -1,17 +1,36 @@
 package com.bdpanajoto.ws.rest.domain;
 
-public class Group implements Identifiable {
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
+import java.util.List;
+
+@Entity
+@Table(name = "groups")
+public class Group {
+
+	@Id
+	@GeneratedValue(strategy= GenerationType.IDENTITY)
 	private Long id;
 	private String name;
-	private User user;
+	@ManyToMany
+	@JoinTable(name = "groups_users",
+			joinColumns = @JoinColumn(name = "groups_id", referencedColumnName = "id", updatable = false),
+			inverseJoinColumns = @JoinColumn(name = "users_id", referencedColumnName = "id", updatable = false))
+	@JsonIgnoreProperties("groups")
+	private List<User> users;
 
-	@Override
 	public Long getId() {
 		return id;
 	}
 
-	@Override
 	public void setId(Long id) {
 		this.id = id;
 	}
@@ -22,6 +41,14 @@ public class Group implements Identifiable {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public List<User> getUsers() {
+		return users;
+	}
+
+	public void setUsers(List<User> users) {
+		this.users = users;
 	}
 
 	@Override
@@ -49,11 +76,5 @@ public class Group implements Identifiable {
 		return true;
 	}
 
-	public User getUser() {
-		return user;
-	}
 
-	public void setUser(User user) {
-		this.user = user;
-	}
 }
