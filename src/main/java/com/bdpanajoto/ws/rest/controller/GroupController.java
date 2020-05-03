@@ -32,12 +32,12 @@ public class GroupController {
         return repository.findAll();
     }
 
-    @GetMapping(value = "/{id}/users")
+    @GetMapping("/{id}/users")
     public Collection<User> findGroupUsers(@PathVariable Long id) {
         return repository.findGroup_UsersById(id);
     }
 
-    @GetMapping(value = "/{id}")
+    @GetMapping("/{id}")
     public Group findGroup(@PathVariable Long id) {
         return repository.findById(id).orElseThrow(() -> new RestClientException("Group not found"));
     }
@@ -52,7 +52,7 @@ public class GroupController {
         return repository.save(group);
     }
 
-    @DeleteMapping(value = "/{id}")
+    @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
         repository.deleteById(id);
     }

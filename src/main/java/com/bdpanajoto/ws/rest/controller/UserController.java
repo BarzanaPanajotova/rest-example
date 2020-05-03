@@ -3,10 +3,9 @@ package com.bdpanajoto.ws.rest.controller;
 import com.bdpanajoto.ws.rest.domain.Group;
 import com.bdpanajoto.ws.rest.domain.Plot;
 import com.bdpanajoto.ws.rest.domain.User;
+import com.bdpanajoto.ws.rest.repository.ReportResult;
 import com.bdpanajoto.ws.rest.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,26 +30,14 @@ public class UserController {
         this.repository = repository;
     }
 
-    @GetMapping(value = "/{id}/groups")
-    public ResponseEntity<Collection<Group>> findUserGroups(@PathVariable Long id) {
-        List<Group> element = repository.getGroupsById(id);
-
-        if (!element.isEmpty()) {
-            return new ResponseEntity<>(element, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    @GetMapping("/{id}/groups")
+    public Collection<Group> findUserGroups(@PathVariable Long id) {
+        return repository.getUser_GroupsById(id);
     }
 
-    @GetMapping(value = "/{id}/plots")
-    public ResponseEntity<Collection<Plot>> findUserPlots(@PathVariable Long id) {
-        List<Plot> element = repository.getPlotsById(id);
-
-        if (!element.isEmpty()) {
-            return new ResponseEntity<>(element, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    @GetMapping("/{id}/plots")
+    public Collection<Plot> findUserPlots(@PathVariable Long id) {
+        return repository.getPlotsById(id);
     }
 
     @GetMapping
@@ -58,7 +45,7 @@ public class UserController {
         return repository.findAll();
     }
 
-    @GetMapping(value = "/{id}")
+    @GetMapping("/{id}")
     public User findGroup(@PathVariable Long id) {
         return repository.findById(id).orElseThrow(() -> new RestClientException("User not found"));
     }
@@ -73,8 +60,13 @@ public class UserController {
         return repository.save(user);
     }
 
-    @DeleteMapping(value = "/{id}")
+    @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
         repository.deleteById(id);
+    }
+
+    @GetMapping("/report")
+    public List<ReportResult> getUserCountByYear() {
+        return repository.getUserCountByYear();
     }
 }

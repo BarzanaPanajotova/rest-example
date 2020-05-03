@@ -7,16 +7,18 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 import java.util.List;
-import java.util.Map;
 
 public interface UserRepository extends PagingAndSortingRepository<User, Long> {
 
-    List<Group> getGroupsById(Long id);
+    @Query(value = "select u.groups from User u where u.id = ?1")
+    List<Group> getUser_GroupsById(Long id);
 
     List<Plot> getPlotsById(Long id);
 
-    @Query(value = "select distinct ud.age, count(ud.user) as cnt " +
+    @Query(value = "select new com.bdpanajoto.ws.rest.repository.ReportResult(ud.age, count(ud.user)) " +
             "from UserDetails ud " +
             "group by ud.age")
-    Map<Integer, Integer> getUserCountByYear();
+    List<ReportResult> getUserCountByYear();
+
+
 }

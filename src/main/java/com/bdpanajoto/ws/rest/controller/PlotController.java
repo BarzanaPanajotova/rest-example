@@ -29,7 +29,7 @@ public class PlotController {
         return repository.findAll();
     }
 
-    @GetMapping(value = "/{id}")
+    @GetMapping("/{id}")
     public Plot findGroup(@PathVariable Long id) {
         return repository.findById(id).orElseThrow(() -> new RestClientException("Plot not found"));
     }
@@ -44,7 +44,7 @@ public class PlotController {
         return repository.save(plot);
     }
 
-    @DeleteMapping(value = "/{id}")
+    @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
         repository.deleteById(id);
     }
