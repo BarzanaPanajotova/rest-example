@@ -31,7 +31,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         List<String> role = userEntity.getGroups().stream()
                 .map(group -> group.getName()).collect(Collectors.toList());
 
-        return User.withDefaultPasswordEncoder()
+        return User.builder()
                 .username(userEntity.getUsername())
                 .password(userEntity.getPassword())
                 .roles(role.toArray(new String[]{}))

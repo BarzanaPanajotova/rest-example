@@ -2,6 +2,7 @@ package com.bdpanajoto.ws.rest.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 
 import javax.persistence.CascadeType;
@@ -28,7 +29,6 @@ public class User {
     @JsonUnwrapped
     private UserDetails userDetails;
     private String username;
-    @JsonIgnore
     private String password;
     @OneToMany
     @JsonIgnoreProperties("user")
@@ -53,10 +53,12 @@ public class User {
         this.username = username;
     }
 
+    @JsonIgnore
     public String getPassword() {
         return password;
     }
 
+    @JsonProperty
     public void setPassword(String password) {
         this.password = password;
     }

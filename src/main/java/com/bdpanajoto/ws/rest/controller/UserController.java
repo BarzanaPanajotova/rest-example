@@ -7,6 +7,7 @@ import com.bdpanajoto.ws.rest.repository.ReportResult;
 import com.bdpanajoto.ws.rest.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,11 +25,13 @@ import java.util.List;
 @RequestMapping(value = "/users", produces = "application/json")
 public class UserController {
 
+    private PasswordEncoder passwordEncoder;
     private UserRepository repository;
 
     @Autowired
-    public UserController(UserRepository repository) {
+    public UserController(UserRepository repository, PasswordEncoder passwordEncoder) {
         this.repository = repository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @GetMapping
@@ -53,6 +56,7 @@ public class UserController {
 
     @PostMapping
     public User save(@RequestBody User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return repository.save(user);
     }
 
