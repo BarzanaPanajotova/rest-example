@@ -8,6 +8,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.Optional;
+
 public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query(value = "select u.groups from User u where u.id = ?1")
@@ -20,5 +22,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "group by ud.age")
     Page<ReportResult> getUserCountByYear(Pageable pageable);
 
-
+    Optional<User> findByUsername(String username);
 }
